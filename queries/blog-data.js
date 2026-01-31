@@ -11,7 +11,7 @@ export const getAllPosts = async (tags) => {
           posts (first: 20, filter: {tags: $tags}) {
             pageInfo {
               hasNextPage
-              cursor
+              endCursor
             }
               edges{
                 node {
