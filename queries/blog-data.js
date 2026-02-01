@@ -2,79 +2,85 @@ import { getClient } from "@/lib/graphql-client";
 import { gql } from "graphql-request";
 
 export const getAllPosts = async (tags) => {
-  const client = getClient();
+	const client = getClient();
 
-  const data = await client.request(gql`
-      query allPosts ($tags: [ObjectId!]) {
-        publication (host: "blog.greenroots.info") {
-          title
-          posts (first: 20, filter: {tags: $tags}) {
-            pageInfo {
-              hasNextPage
-              endCursor
-            }
-              edges{
-                node {
-                  author {
-                    name
-                    profilePicture
-                  }
-                  title
-                  subtitle
-                  brief
-                  slug
-                  coverImage {
-                    url
-                  }
-                  tags {
-                    name
-                    slug
-                    id
-                  }
-                  publishedAt
-                  readTimeInMinutes
-                }
-              }
-          }
-        }
-      }
-    `, {
-    tags: tags
-  });
+	const data = await client.request(
+		gql`
+			query allPosts($tags: [ObjectId!]) {
+				publication(host: "blog.greenroots.info") {
+					title
+					posts(first: 20, filter: { tags: $tags }) {
+						pageInfo {
+							hasNextPage
+							endCursor
+						}
+						edges {
+							node {
+								author {
+									name
+									profilePicture
+								}
+								title
+								subtitle
+								brief
+								slug
+								coverImage {
+									url
+								}
+								tags {
+									name
+									slug
+									id
+								}
+								publishedAt
+								readTimeInMinutes
+							}
+						}
+					}
+				}
+			}
+		`,
+		{
+			tags: tags,
+		},
+	);
 
-  return data.publication.posts.edges;
+	return data.publication.posts.edges;
 };
 
 export const getPostBySlug = async (slug) => {
-  const client = getClient();
+	const client = getClient();
 
-  const data = await client.request(gql`
-      query postBySlug ($slug: String!) {
-        publication (host: "blog.greenroots.info") {
-          post (slug: $slug) {
-            author {
-              name
-              profilePicture
-            }
-            title
-            subtitle
-            publishedAt
-            readTimeInMinutes
-            content {
-              html
-            }
-            tags {
-              name
-              slug
-              id
-            }
-            coverImage {
-              url
-            }
-          }
-        }
-      }
-    `, { slug: slug });
+	const data = await client.request(
+		gql`
+			query postDetails($slug: String!) {
+				publication(host: "blog.greenroots.info") {
+					post(slug: $slug) {
+						author {
+							name
+							profilePicture
+						}
+						publishedAt
+						title
+						subtitle
+						readTimeInMinutes
+						content {
+							html
+						}
+						tags {
+							name
+							slug
+							id
+						}
+						coverImage {
+							url
+						}
+					}
+				}
+			}
+		`,
+		{ slug: slug },
+	);
 
-  return data.publication.post;
+	return data.publication.post;
 };

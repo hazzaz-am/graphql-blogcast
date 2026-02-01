@@ -3,9 +3,10 @@ import { getFormattedDate } from "@/utils";
 import Image from "next/image";
 
 export default function PostCard({ post }) {
+  console.log(post.slug);
   return (
     <div className="card bg-white shadow-lg rounded-lg overflow-hidden">
-      <Link href={`/blog/${post.slug}`}>
+      <Link href={`/posts/${post.slug}`}>
         <Image
           height={300}
           width={500}
